@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
 from scraper.google_scraper import Google
 from scraper.utils import create_scraper_input
 
 app = Flask(__name__)
+CORS(app)  # 🚨 This enables CORS for all routes
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -23,15 +25,11 @@ def home():
 
     return render_template("index.html")
 
-
 @app.route("/api/google-jobs", methods=["POST"])
 def google_jobs_api():
-    data = request.get_json()
+    data = request.json
     job_title = data.get("job_title")
     location = data.get("location")
-
-    if not job_title:
-        return jsonify({"error": "job_title is required"}), 400
 
     scraper = Google()
     scraper_input = create_scraper_input(
@@ -41,12 +39,12 @@ def google_jobs_api():
         hours_old=168,
         is_remote=False
     )
-    jobs = scraper.scrape(scraper_input).to_df()
-    return jobs.to_json(orient="records")
-
+    jobs_df = scraper.scrape(scraper_input).to_df()
+    return jsonify(jobs_df.to_dict(orient="records"))
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    app.run(host="0.0.0.0", port=10000, debug=True)
+
 
 
 
