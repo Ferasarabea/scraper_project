@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from scraper.google_scraper import Google
 from scraper.utils import create_scraper_input
+from flask_cors import CORS
 
 app = Flask(__name__)
 
