@@ -43,7 +43,7 @@ def google_jobs_api():
     return jsonify(jobs_df.to_dict(orient="records"))
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000, debug=True)
+    app.run(host="0.0.0.0", port=6000, debug=True)
 
 
 
