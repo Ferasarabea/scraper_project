@@ -2,3 +2,4 @@ pandas
 requests
 Flask
 flask-cors
+stem
